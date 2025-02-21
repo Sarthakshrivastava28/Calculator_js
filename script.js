@@ -11,6 +11,10 @@ Calculator.prototype.clear = function () {
 };
 Calculator.prototype.delete = function () {
   this.currentOperand = this.currentOperand.toString().slice(0, -1);
+  if(this,this.currentOperand === ''){
+    this.operation=''
+  }
+  
 };
 
 Calculator.prototype.appendNumber = function (number) {
@@ -19,14 +23,31 @@ Calculator.prototype.appendNumber = function (number) {
 };
 
 Calculator.prototype.chooseOperation = function (operation) {
-  if (this.currentOperand === "") return;
+  if (this.previousOperand !== "" && this.currentOperand !== "") {
+    this.operation = operation; // Update the operation
+    return;
+  }
+  
+  
+  if (this.currentOperand === "") {
+    // Change the operation if there's no new number entered but previous operand exists
+    if (this.previousOperand !== "") {
+      this.operation = operation;
+    }
+    return;
+  }
+
+ 
   if (this.previousOperand !== "") {
     this.compute();
   }
+
+  // Set the new operation and move current operand to previous
   this.operation = operation;
   this.previousOperand = this.currentOperand;
   this.currentOperand = "";
-};
+}
+
 
 Calculator.prototype.compute = function () {
   let computation;
